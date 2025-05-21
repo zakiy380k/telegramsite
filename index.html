@@ -1,49 +1,28 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <title>Виртуальный питомец</title>
-  <style>
-    body { font-family: Arial, sans-serif; max-width: 400px; margin: 20px auto; }
-    button { padding: 10px 20px; margin-top: 10px; }
-  </style>
+<meta charset="UTF-8" />
+<title>Проверка Telegram Storage</title>
 </head>
 <body>
-  <h1>Мой виртуальный питомец</h1>
-  <p>Голод: <span id="hunger"></span></p>
-  <p>Настроение: <span id="mood"></span></p>
-  <button id="feedBtn">Покормить питомца</button>
+  <h1>Telegram Storage Test</h1>
+  <button id="saveBtn">Сохранить данные</button>
+  <button id="loadBtn">Загрузить данные</button>
+  <p id="output"></p>
 
-  <script>
-    const tg = window.Telegram.WebApp;
-    const storage = tg.WebApp.Storage;
+<script>
+  const tg = window.Telegram.WebApp;
+  const storage = tg.WebApp.Storage;
 
-    // Загрузить состояние питомца или задать начальное
-    function loadPetState() {
-      const petData = storage.getItem('petState');
-      return petData ? JSON.parse(petData) : { hunger: 50, mood: 80 };
-    }
+  document.getElementById('saveBtn').onclick = () => {
+    storage.setItem('testKey', 'Привет, Telegram Storage!');
+    alert('Данные сохранены');
+  };
 
-    // Сохранить состояние питомца
-    function savePetState(pet) {
-      storage.setItem('petState', JSON.stringify(pet));
-    }
-
-    let pet = loadPetState();
-
-    function updateUI() {
-      document.getElementById('hunger').innerText = pet.hunger;
-      document.getElementById('mood').innerText = pet.mood;
-    }
-
-    document.getElementById('feedBtn').onclick = () => {
-      pet.hunger = Math.max(0, pet.hunger - 20);
-      pet.mood = Math.min(100, pet.mood + 5);
-      savePetState(pet);
-      updateUI();
-    };
-
-    updateUI();
-  </script>
+  document.getElementById('loadBtn').onclick = () => {
+    const val = storage.getItem('testKey');
+    document.getElementById('output').innerText = val ? val : 'Данные не найдены';
+  };
+</script>
 </body>
 </html>
